@@ -1,6 +1,6 @@
-create database eazybank;
+create database bank_security;
 
-use eazybank;
+use bank_security;
 
 CREATE TABLE `users` (
                          `id` INT NOT NULL AUTO_INCREMENT,

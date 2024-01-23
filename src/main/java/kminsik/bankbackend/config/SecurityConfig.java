@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,19 +21,21 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(requests -> requests
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(requests -> requests
 //                        .anyRequest().permitAll())
                         .requestMatchers("myAccount", "myBalance", "myCards", "myLoans").authenticated()
-                        .requestMatchers("/notices", "/contact").permitAll())
+                        .requestMatchers("/notices", "/contact", "/register").permitAll())
                         .formLogin(Customizer.withDefaults())
                         .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
+
+//    @Bean
+//    public UserDetailsService userDetailsService(DataSource dataSource) {
+//        return new JdbcUserDetailsManager(dataSource);
+//    }
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsService() {
